@@ -1,0 +1,9 @@
+Frontend "Buy" Click
+    ↓ POST /paypal/create-order
+Backend: create order → Get approvalUrl
+    ↓ Redirect to PayPal
+PayPal: User pays → redirects back
+    ↓ POST /paypal/verify-payment
+Backend: verify payment → enroll user
+    ↓ GET /course/:courseId
+Backend: fetch course info + purchase status
