@@ -19,6 +19,7 @@ const allowedOrigins = [
   "http://localhost:8000",
   "http://localhost:3000",
   "http://localhost:5000",
+  process.env.CLIENT_URL, // Add production frontend URL
 ];
 
 // Use CORS with custom origin validation
