@@ -1,5 +1,4 @@
 import React from "react";
-
 import { Button } from "./components/ui/button";
 import Login from "./pages/Login";
 import Mainlayout from "./layout/Mainlayout";
@@ -15,10 +14,9 @@ import CreateLecture from "./pages/admin/Lecture/CreateLecture";
 import EditLecture from "./pages/admin/Lecture/EditLecture";
 import CourseDetails from "./pages/student/CourseDetails";
 import CourseProgress from "./pages/student/CourseProgress";
-
 import { BrowserRouter, Route, Routes } from "react-router";
 import PaypalVerification from "./pages/PaypalVerification";
-import SearchPage from "./pages/student/Searchpage";
+import SearchPage from "./pages/student/SearchPage"; // Fixed case sensitivity
 import {
   AdminRoute,
   AuthenticatedUser,

@@ -5,7 +5,9 @@ const COURSE_PROGRESS_API = "http://localhost:8000/api/v1/progress";
 export const courseProgressApi = createApi({
   reducerPath: "courseProgressApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: COURSE_PROGRESS_API,
+    baseUrl: import.meta.env.PROD 
+      ? `${import.meta.env.VITE_API_URL}/progress`
+      : COURSE_PROGRESS_API,
     credentials: "include",
   }),
   endpoints: (builder) => ({

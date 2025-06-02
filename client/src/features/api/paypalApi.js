@@ -3,7 +3,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const paypalApi = createApi({
   reducerPath: "paypalApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8000/api/v1/purchase",
+    baseUrl: import.meta.env.PROD 
+      ? `${import.meta.env.VITE_API_URL}/purchase`
+      : "http://localhost:8000/api/v1/purchase",
     credentials: "include",
   }), // your backend API URL
   endpoints: (builder) => ({
