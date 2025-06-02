@@ -6,13 +6,13 @@ export const generateToken = (res, user, message) => {
     expiresIn: "1d",
   });
 
-  // cookie set with proper cross-origin settings
+  // Update cookie settings
   res.cookie("token", token, {
     httpOnly: true,
-    secure: true, // Required for cross-site cookies with HTTPS
-    sameSite: "none", // Required for cross-site cookies
+    secure: process.env.NODE_ENV === 'production', // Only use secure in production
+    sameSite: process.env.NODE_ENV === 'production' ? "none" : "lax", // Use "none" for cross-site in production
     maxAge: 24 * 60 * 60 * 1000,
-    path: "/", // Ensure cookie is available for all paths
+    path: "/",
   });
 
   return res.status(200).json({
