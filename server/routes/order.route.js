@@ -8,10 +8,12 @@ import {
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 const router = express.Router();
 
-router.post("/paypal/create-order", createPaypalOrder);
-
-router.post("/paypal/verify-payment", verifyPaypalPayment);
+// Make this route public (no authentication required)
 router.get("/course/:courseId/detail-with-status", getCourseDetailWithPurchaseStatus);
-router.get("/", getAllPurchasedCourse);
+
+// Keep these routes protected
+router.post("/paypal/create-order", isAuthenticated, createPaypalOrder);
+router.post("/paypal/verify-payment", isAuthenticated, verifyPaypalPayment);
+router.get("/", isAuthenticated, getAllPurchasedCourse);
 
 export default router;

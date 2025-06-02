@@ -22,6 +22,13 @@ const allowedOrigins = [
   process.env.CLIENT_URL, // Add production frontend URL
 ];
 
+// Add this middleware before your routes to log all requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  console.log("Cookies:", req.cookies);
+  next();
+});
+
 // More permissive CORS configuration (TEMPORARY FOR TESTING ONLY)
 app.use(
   cors({

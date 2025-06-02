@@ -133,25 +133,31 @@ export const verifyPaypalPayment = async (req, res) => {
 export const getCourseDetailWithPurchaseStatus = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const userId = req.id;
+    const userId = req.id; // This might be undefined for unauthenticated users
 
     const course = await Course.findById(courseId)
       .populate({ path: "creator" })
       .populate({ path: "lectures" });
 
-    const purchased = await CoursePurchase.findOne({ userId, courseId });
-    console.log("purchased", purchased);
     if (!course) {
       return res.status(404).json({ message: "Course not found!" });
     }
 
+    // If user is not authenticated, return course without purchase status
+    if (!userId) {
+      return res.status(200).json({
+        course,
+        purchased: false,
+      });
+    }
+
+    // Check purchase status for authenticated users
+    const purchased = await CoursePurchase.findOne({ userId, courseId });
+    console.log("purchased", purchased);
+
     return res.status(200).json({
       course,
       purchased: !!purchased,
-
-      // purchased?true:false
-      // or
-      // !!purchased
     });
   } catch (error) {
     console.log(error);
