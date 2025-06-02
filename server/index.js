@@ -22,18 +22,11 @@ const allowedOrigins = [
   process.env.CLIENT_URL, // Add production frontend URL
 ];
 
-// Use CORS with custom origin validation
+// More permissive CORS configuration (TEMPORARY FOR TESTING ONLY)
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, Postman)
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // allow cookies & auth headers
+    origin: true, // Allow all origins
+    credentials: true, // Allow credentials
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   })
 );
