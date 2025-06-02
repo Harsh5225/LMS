@@ -137,6 +137,7 @@ const CourseDetail = () => {
                 <h2 className="font-bold text-xl mb-4">About This Course</h2>
                 <div className="prose prose-lg dark:prose-invert max-w-4xl mx-auto px-4 py-6 antialiased">
                   <div
+                    className="prose prose-lg dark:prose-invert max-w-4xl mx-auto px-4 py-6 antialiased"
                     dangerouslySetInnerHTML={{ __html: course.description }}
                   />
                 </div>

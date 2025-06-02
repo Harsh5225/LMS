@@ -30,6 +30,7 @@ export const paypalApi = createApi({
       query: (courseId) => ({
         url: `course/${courseId}/detail-with-status`,
         method: "GET",
+        credentials: "include", // Ensure cookies are sent
       }),
     }),
     // New endpoint to get all purchased courses
