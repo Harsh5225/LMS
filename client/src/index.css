@@ -118,3 +118,31 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Add these styles to handle rich text content in dark mode */
+.dark .prose-lg p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.dark .prose-lg h1,
+.dark .prose-lg h2,
+.dark .prose-lg h3,
+.dark .prose-lg h4,
+.dark .prose-lg h5,
+.dark .prose-lg h6 {
+  color: white;
+}
+
+.dark .prose-lg a {
+  color: #93c5fd;
+}
+
+.dark .prose-lg strong {
+  color: white;
+}
+
+.dark .prose-lg ul li,
+.dark .prose-lg ol li {
+  color: rgba(255, 255, 255, 0.9);
+}
+

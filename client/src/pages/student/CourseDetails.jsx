@@ -133,11 +133,11 @@ const CourseDetail = () => {
 
             {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-6">
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
-                <h2 className="font-bold text-xl mb-4">About This Course</h2>
+              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-100 dark:border-gray-700">
+                <h2 className="font-bold text-xl mb-4 dark:text-white">About This Course</h2>
                 <div className="prose prose-lg dark:prose-invert max-w-4xl mx-auto px-4 py-6 antialiased">
                   <div
-                    className="prose prose-lg dark:prose-invert max-w-4xl mx-auto px-4 py-6 antialiased"
+                    className="prose prose-lg dark:prose-invert max-w-4xl mx-auto antialiased"
                     dangerouslySetInnerHTML={{ __html: course.description }}
                   />
                 </div>
