@@ -9,10 +9,12 @@ import mediaRoute from "./routes/media.route.js";
 import orderRoute from "./routes/order.route.js";
 import isAuthenticated from "./middlewares/isAuthenticated.js";
 import courseProgressRoute from "./routes/courseProgress.route.js";
+import aiRoute from "./routes/ai.route.js";
 const app = express();
 dotenv.config();
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
 const allowedOrigins = [
   "http://localhost:5173",
@@ -58,6 +60,15 @@ app.use("/api/v1/user", userRoute);
 app.use("/api/v1/course", courseRoute);
 app.use("/api/v1/purchase",isAuthenticated, orderRoute);
 app.use("/api/v1/progress", courseProgressRoute);
+app.use("/api/v1/ai", aiRoute);
+
+app.get("/api/v1/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // app.get('/',(req,res)=>{
 //   res.send("Welcome to LMS backend")

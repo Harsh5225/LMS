@@ -11,7 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCreateCourseMutation } from "@/features/api/courseApi";
-import { Loader2 } from "lucide-react";
+import { useGenerateDescriptionMutation } from "@/features/api/aiApi";
+import { Loader2, Sparkles } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import React, { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
@@ -20,13 +21,36 @@ import { toast } from "sonner";
 const AddCourse = () => {
   const [courseTitle, setCourseTitle] = useState("");
   const [courseCategory, setCourseCategory] = useState("");
+  const [courseLevel, setCourseLevel] = useState("beginner");
 
-  //
   const [createCourse, { data, error, isLoading, isSuccess }] =
     useCreateCourseMutation();
+  const [generateDescription, { isLoading: isGenerating }] =
+    useGenerateDescriptionMutation();
 
   console.log("AddCourse rendered");
   const navigate = useNavigate();
+
+  const handleGenerateDescription = async () => {
+    if (!courseTitle || !courseCategory) {
+      toast.error("Please enter course title and category first");
+      return;
+    }
+
+    try {
+      const result = await generateDescription({
+        courseTitle,
+        category: courseCategory,
+        courseLevel,
+      }).unwrap();
+
+      toast.success("Description generated! Check console for details.");
+      console.log("Generated Description:", result.data);
+      // You can set this to a state variable if you want to display it
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to generate description");
+    }
+  };
 
   // backend api call to create course
   // this function will be called when the user clicks on the create button
@@ -110,6 +134,45 @@ const AddCourse = () => {
             </SelectContent>
           </Select>
         </div>
+        <div>
+          <Label className="mb-2">Course Level</Label>
+          <Select value={courseLevel} onValueChange={setCourseLevel}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="beginner">Beginner</SelectItem>
+              <SelectItem value="intermediate">Intermediate</SelectItem>
+              <SelectItem value="advanced">Advanced</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        {courseTitle && courseCategory && (
+          <div>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleGenerateDescription}
+              disabled={isGenerating}
+              className="w-full"
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Generate AI Description
+                </>
+              )}
+            </Button>
+            <p className="text-xs text-slate-500 mt-2">
+              AI will generate course description, objectives, and target audience
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="flex gap-4 mt-4">

@@ -12,20 +12,22 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { BadgeInfo, Lock, PlayCircle, Clock, Users, Star } from "lucide-react";
+import { BadgeInfo, Lock, PlayCircle, Clock, Users, Star, Sparkles } from "lucide-react";
 import ReactPlayer from "react-player";
 import BuyCourseButton from "@/components/BuyCourseButton";
+import AIChatbot from "@/components/AIChatbot";
+import { useState } from "react";
 
 import { useNavigate, useParams } from "react-router";
 import {
   useGetCourseDetailWithPurchaseStatusQuery,
   useVerifyPaymentMutation,
 } from "@/features/api/paypalApi";
-import { use } from "react";
 import { toast } from "sonner";
 
 const CourseDetail = () => {
   const navigate = useNavigate();
+  const [showChatbot, setShowChatbot] = useState(false);
   const descriptionStyles = {
     fontSize: "1.125rem", // Slightly bigger font size
     fontWeight: "300", // Light font weight
@@ -56,7 +58,22 @@ const CourseDetail = () => {
   };
 
   return (
-    <div className="mt-16 space-y-4">
+    <div className="mt-16 space-y-4 relative">
+      {showChatbot && (
+        <AIChatbot
+          courseContext={course}
+          onClose={() => setShowChatbot(false)}
+        />
+      )}
+      {!showChatbot && (
+        <Button
+          onClick={() => setShowChatbot(true)}
+          className="fixed bottom-6 right-6 rounded-full h-14 w-14 shadow-2xl bg-gradient-to-br from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 z-40"
+          size="icon"
+        >
+          <Sparkles className="h-6 w-6" />
+        </Button>
+      )}
       {/* Hero Section with gradient background */}
       <div className="bg-gradient-to-r from-[#1E293B] to-[#2D2F31] text-white">
         <div className="max-w-7xl mx-auto py-10 px-4 md:px-8 flex flex-col gap-3">

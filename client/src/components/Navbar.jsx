@@ -7,8 +7,10 @@ import {
   LogOut,
   LayoutDashboard,
   Menu,
+  Search,
+  Sparkles,
 } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -46,6 +48,7 @@ import DarkMode from "../DarkMode";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
   const user = useSelector((store) => store.auth.user);
   const isAuthenticated = useSelector((store) => store.auth.isAuthenticated);
   const { refetch } = useLoadUserQuery({
@@ -70,6 +73,14 @@ const Navbar = () => {
     }
   }, [isSuccess]);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/course/search?query=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+    }
+  };
+
   return (
     <div className="h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-50 shadow-sm dark:shadow-gray-900/20">
       {/* Desktop */}
@@ -83,7 +94,31 @@ const Navbar = () => {
           </Link>
         </div>
 
+        <div className="flex items-center gap-4 flex-1 max-w-md mx-8">
+          {/* Search Bar */}
+          <form onSubmit={handleSearch} className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search courses..."
+              className="pl-10 h-9 w-full border-slate-300 dark:border-slate-700 focus:border-indigo-500 dark:focus:border-indigo-400"
+            />
+          </form>
+        </div>
+
         <div className="flex items-center gap-4">
+          {user && (
+            <Button
+              variant="ghost"
+              onClick={() => navigate("/ai-recommendations")}
+              className="hidden md:flex items-center gap-2"
+            >
+              <Sparkles className="h-4 w-4" />
+              Learning Roadmap
+            </Button>
+          )}
           <DarkMode />
           {user ? (
             <DropdownMenu>

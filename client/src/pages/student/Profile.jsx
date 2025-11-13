@@ -20,6 +20,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router";
+
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -27,9 +29,7 @@ const Profile = () => {
   const [previewImage, setPreviewImage] = useState("");
 
   const { data, isLoading, refetch } = useLoadUserQuery();
-  console.log("data of profile", data);
-  const { user } = data || {};
-  console.log("user in profile", user);
+  const user = data?.user;
 
   const [
     updateUser,
@@ -63,10 +63,10 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-12 sm:py-16 lg:py-20">
+      <div className="page-shell px-6 py-12 md:px-12">
         <div className="flex flex-col items-center">
           <Skeleton className="h-8 w-48 mb-8" />
-          <div className="w-full flex flex-col md:flex-row items-center md:items-start gap-8 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+          <div className="glass-card w-full flex flex-col md:flex-row items-center md:items-start gap-8 p-6">
             <Skeleton className="h-32 w-32 rounded-full" />
             <div className="flex-1 space-y-4">
               <Skeleton className="h-6 w-3/4" />
@@ -78,7 +78,7 @@ const Profile = () => {
           <Skeleton className="h-6 w-64 mt-12 mb-6" />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
             {[...Array(3)].map((_, i) => (
-              <Skeleton key={i} className="h-64 w-full rounded-lg" />
+              <Skeleton key={i} className="glass-card h-64" />
             ))}
           </div>
         </div>
@@ -87,20 +87,18 @@ const Profile = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12 sm:py-16 lg:py-20">
-      <div className="text-center mb-12">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          My Profile
-        </h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Manage your account settings and enrolled courses
-        </p>
-      </div>
+    <div className="space-y-10">
+      <div className="page-shell px-6 py-12 md:px-12 space-y-12">
+        <div className="text-center md:text-left">
+          <h1 className="text-3xl font-bold">My Profile</h1>
+          <p className="page-subtitle mt-2">
+            Manage your account settings and enrolled courses
+          </p>
+        </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-12">
-        <div className="flex flex-col md:flex-row items-center gap-8">
-          <div className="relative group">
-            <Avatar className="h-32 w-32 border-4 border-white dark:border-gray-800 shadow-md">
+        <div className="glass-card flex flex-col gap-8 md:flex-row md:items-start p-6 md:p-8">
+          <div className="relative group mx-auto md:mx-0">
+            <Avatar className="h-32 w-32 border-4 border-white/80 shadow-md dark:border-slate-800">
               <AvatarImage
                 src={
                   previewImage ||
@@ -114,20 +112,20 @@ const Profile = () => {
                 {user?.name?.charAt(0).toUpperCase() || "U"}
               </AvatarFallback>
             </Avatar>
-            <div className="absolute inset-0 bg-black bg-opacity-30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100 flex items-center justify-center">
               <Pencil className="text-white h-6 w-6" />
             </div>
           </div>
 
-          <div className="flex-1 space-y-3">
+          <div className="flex-1 space-y-4">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
                 {user?.name}
               </h2>
-              <p className="text-gray-600 dark:text-gray-400">{user?.email}</p>
+              <p className="text-slate-600 dark:text-slate-300">{user?.email}</p>
             </div>
 
-            <Badge variant="outline" className="text-sm">
+            <Badge variant="outline" className="w-fit text-sm">
               {user?.role?.toUpperCase()}
             </Badge>
 
@@ -199,32 +197,28 @@ const Profile = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-          Enrolled Courses
-        </h2>
-        {user?.enrolledCourses?.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-8 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 mb-4">
-              <User className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold">Enrolled Courses</h2>
+          {user?.enrolledCourses?.length === 0 ? (
+            <div className="page-section text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 mb-4">
+                <User className="h-5 w-5 text-slate-500 dark:text-slate-300" />
+              </div>
+              <h3 className="text-lg font-medium">No courses enrolled</h3>
+              <p className="page-subtitle mt-2">
+                You haven't enrolled in any courses yet.
+              </p>
+              <Button className="mt-4" onClick={() => navigate("/my-learning")}>Browse Courses</Button>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-              No courses enrolled
-            </h3>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              You haven't enrolled in any courses yet.
-            </p>
-            <Button className="mt-4">Browse Courses</Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {user?.enrolledCourses?.map((course) => (
-              <Course key={course._id} course={course} />
-            ))}
-          </div>
-        )}
+          ) : (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+              {user?.enrolledCourses?.map((course) => (
+                <Course key={course._id} course={course} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

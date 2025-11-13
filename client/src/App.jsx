@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "./components/ui/button";
 import Login from "./pages/Login";
 import Mainlayout from "./layout/Mainlayout";
@@ -17,6 +17,7 @@ import CourseProgress from "./pages/student/CourseProgress";
 import { BrowserRouter, Route, Routes } from "react-router";
 import PaypalVerification from "./pages/PaypalVerification";
 import SearchPage from "./pages/student/SearchPage"; // Fixed case sensitivity
+import AIRecommendationsPage from "./pages/student/AIRecommendationsPage";
 import {
   AdminRoute,
   AuthenticatedUser,
@@ -26,6 +27,37 @@ import PurchaseCourseProtectedRoute from "./components/PurchaseRouteCourse";
 import { ThemeProvider } from "./components/ThemeProvider";
 
 const App = () => {
+  const apiBase = import.meta.env.PROD
+    ? import.meta.env.VITE_API_URL
+    : "http://localhost:8000/api/v1";
+
+  useEffect(() => {
+    if (!apiBase) return;
+
+    let isActive = true;
+    const keepAlive = async () => {
+      try {
+        await fetch(`${apiBase}/health`, {
+          credentials: "include",
+        });
+      } catch (error) {
+        console.warn("Health check failed:", error?.message || error);
+      }
+    };
+
+    keepAlive();
+    const intervalId = window.setInterval(() => {
+      if (isActive) {
+        keepAlive();
+      }
+    }, 5 * 60 * 1000);
+
+    return () => {
+      isActive = false;
+      window.clearInterval(intervalId);
+    };
+  }, [apiBase]);
+
   return (
     <main>
       <ThemeProvider>
@@ -36,6 +68,14 @@ const App = () => {
               <Route index element={<HomePage />} />
               <Route
                 path="login"
+                element={
+                  <AuthenticatedUser>
+                    <Login />
+                  </AuthenticatedUser>
+                }
+              />
+              <Route
+                path="signup"
                 element={
                   <AuthenticatedUser>
                     <Login />
@@ -87,6 +127,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <SearchPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="ai-recommendations"
+                element={
+                  <ProtectedRoute>
+                    <AIRecommendationsPage />
                   </ProtectedRoute>
                 }
               />

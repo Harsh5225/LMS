@@ -5,7 +5,8 @@ import { userLoggedIn, userLoggedOut } from "../Authslice";
 // Replace hardcoded URL with environment variable
 const USER_API = import.meta.env.PROD 
   ? `${import.meta.env.VITE_API_URL}/user/`
-  : "http://localhost:8000/api/v1/user/";
+  : "http://localhost:3000/api/v1/user/";
+// const USER_API =  "http://localhost:8000/api/v1/user/";
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
@@ -39,9 +40,12 @@ export const authApi = createApi({
           // Debugging: Check the actual response structure
           console.log("Response:", result, "hello its corrected no error");
 
-          // Ensure result.data exists before accessing user
-          if (result?.data?.user) {
-            dispatch(userLoggedIn({ user: result.data.user }));
+          // Server returns: { success: true, message: "...", user: { user: {...} } }
+          // So we need to access result.data.user.user for the nested structure
+          const userData = result?.data?.user?.user || result?.data?.user;
+          
+          if (userData) {
+            dispatch(userLoggedIn({ user: userData }));
           } else {
             console.error("Unexpected response structure:", result);
           }
@@ -76,14 +80,17 @@ export const authApi = createApi({
           // Debugging: Check the actual response structure
           console.log("Response:", result, "hello its corrected no error");
 
-          // Ensure result.data exists before accessing user
-          if (result?.data?.user) {
-            dispatch(userLoggedIn({ user: result.data.user }));
+          // Server returns: { success: true, message: "...", user: { user: {...} } }
+          // So we need to access result.data.user.user for the nested structure
+          const userData = result?.data?.user?.user || result?.data?.user;
+          
+          if (userData) {
+            dispatch(userLoggedIn({ user: userData }));
           } else {
             console.error("Unexpected response structure:", result);
           }
         } catch (error) {
-          console.error("Login failed:", error);
+          console.error("Load user failed:", error);
         }
       },
     }),

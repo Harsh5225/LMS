@@ -4,6 +4,7 @@ import { authApi } from "@/features/api/authapi.js";
 import { courseApi } from "@/features/api/courseApi.js";
 import { paypalApi } from "@/features/api/paypalApi.js";
 import { courseProgressApi } from "@/features/api/courseApiProgress.js";
+import { aiApi } from "@/features/api/aiApi.js";
 
 export const appStore = configureStore({
   reducer: rootReducer,
@@ -12,7 +13,8 @@ export const appStore = configureStore({
       authApi.middleware,
       courseApi.middleware,
       paypalApi.middleware,
-      courseProgressApi.middleware
+      courseProgressApi.middleware,
+      aiApi.middleware
     ),
 });
 // middleware is used to add custom functionality to the store, such as logging actions, handling asynchronous requests, or modifying the state before it reaches the reducers.

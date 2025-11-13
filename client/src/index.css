@@ -146,3 +146,43 @@
   color: rgba(255, 255, 255, 0.9);
 }
 
+@layer components {
+  .page-shell {
+    @apply relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white/80 shadow-xl backdrop-blur-md dark:border-slate-800/60 dark:bg-slate-900/70;
+  }
+
+  .page-shell::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-transparent dark:from-blue-500/20 dark:via-indigo-500/10 dark:to-transparent;
+  }
+
+  .page-shell > * {
+    @apply relative z-10;
+  }
+
+  .page-section {
+    @apply space-y-4 rounded-3xl border border-slate-200/60 bg-white/80 p-8 shadow-lg backdrop-blur-md dark:border-slate-800/60 dark:bg-slate-900/70;
+  }
+
+  .page-section-header {
+    @apply flex flex-col gap-2 text-center md:text-left;
+  }
+
+  .page-title {
+    @apply text-3xl font-bold tracking-tight text-slate-900 dark:text-white;
+  }
+
+  .page-subtitle {
+    @apply text-base text-slate-600 dark:text-slate-300;
+  }
+
+  .glass-card {
+    @apply rounded-2xl border border-slate-200/60 bg-white/75 shadow-lg transition hover:-translate-y-1 hover:shadow-2xl dark:border-slate-800/60 dark:bg-slate-900/70;
+    backdrop-filter: blur(12px);
+  }
+
+  .glass-card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl;
+  }
+}
+

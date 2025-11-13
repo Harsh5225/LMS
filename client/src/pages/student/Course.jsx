@@ -7,12 +7,12 @@ import { Link } from "react-router";
 const Course = ({ course }) => {
   return (
     <Link to={`/course-detail/${course._id}`}>
-      <Card className="overflow-hidden rounded-lg dark:bg-gray-800 bg-white shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+      <Card className="glass-card glass-card-hover overflow-hidden rounded-2xl">
         <div className="relative">
           <img
             src={course.courseThumbnail}
             alt="course"
-            className="w-full h-36 object-cover rounded-t-lg"
+            className="w-full h-36 object-cover"
           />
         </div>
         <CardContent className="px-5 py-4 space-y-3">
@@ -32,11 +32,7 @@ const Course = ({ course }) => {
               </Avatar>
               <h1 className="font-medium text-sm">{course.creator?.name}</h1>
             </div>
-            <Badge
-              className={
-                "bg-blue-600 text-white px-2 py-1 text-xs rounded-full"
-              }
-            >
+            <Badge className="rounded-full bg-blue-600 px-2 py-1 text-xs text-white dark:bg-blue-500">
               {course.courseLevel}
             </Badge>
           </div>

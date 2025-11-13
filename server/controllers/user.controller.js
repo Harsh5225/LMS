@@ -65,6 +65,7 @@ export const login = async (req, res) => {
       });
     }
 
+    console.log(email, password);
     // checks email whether it is present in the db, if it is not in db how user can login in the application
     const userExist = await User.findOne({ email });
     if (!userExist) {
