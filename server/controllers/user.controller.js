@@ -97,27 +97,29 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (req, res) => {
+export const logout = (req, res) => {
   try {
-    res
-      .status(200)
-      .cookie("token", "", {
-        maxAge: 0,
-        httpOnly: true,
-        sameSite: "strict",
-      })
-      .json({
-        success: true,
-        message: "Logout successfully",
-      });
+    res.cookie("token", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      expires: new Date(0),
+      path: "/", // MUST MATCH
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Logout successfully",
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "internal Server Error",
+      message: "Internal Server Error",
     });
   }
 };
+
 
 // usser ko profile tabhi dikhaenge jab wo login hoga
 // isliye hum token ko verify karenge ki wo login hai ya nahi
